@@ -1,0 +1,9 @@
+node_modules/
+.next/
+out
+.env
+package-lock.json
+yarn.lock
+**/dist/
+.DS_Store
+.vscode/
