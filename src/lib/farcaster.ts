@@ -1,5 +1,3 @@
-// Farcaster utility functions using Neynar API
-
 interface UserStats {
   fid: number;
   username: string;
@@ -11,7 +9,7 @@ interface UserStats {
 
 /**
  * Get user stats from Neynar API
- * @param fid 
+ * @param fid - Farcaster ID
  * @returns User stats object
  */
 export async function getUserStats(fid: number): Promise<UserStats> {
@@ -19,20 +17,24 @@ export async function getUserStats(fid: number): Promise<UserStats> {
     const apiKey = process.env.NEXT_PUBLIC_NEYNAR_API_KEY;
     
     if (!apiKey) {
-      throw new Error('NEYNAR_API_KEY is not configured');
+      console.warn('NEYNAR_API_KEY is not configured');
+      throw new Error('API key missing');
     }
 
     const response = await fetch(
       `https://api.neynar.com/v2/farcaster/user/bulk?fids=${fid}`,
       {
         headers: {
+          'accept': 'application/json',
           'api_key': apiKey,
         },
       }
     );
 
     if (!response.ok) {
-      throw new Error(`Neynar API error: ${response.statusText}`);
+      const errorText = await response.text();
+      console.error('Neynar API error:', response.status, errorText);
+      throw new Error(`Neynar API error: ${response.status}`);
     }
 
     const data = await response.json();
@@ -51,7 +53,7 @@ export async function getUserStats(fid: number): Promise<UserStats> {
       pfpUrl: user.pfp_url,
     };
   } catch (error) {
-    console.error('Error fetching user stats:', error);
+    console.error('Error fetching user stats from Neynar:', error);
     
     // Return default values on error
     return {
