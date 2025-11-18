@@ -44,11 +44,6 @@ interface UserStats {
   followingCount: number;
 }
 
-interface WatchlistItem {
-  project: string;
-  created_at: string;
-}
-
 const DashboardInteractive = () => {
   const router = useRouter();
   const [isHydrated, setIsHydrated] = useState(false);
@@ -179,7 +174,7 @@ const DashboardInteractive = () => {
 
       if (error) throw error;
       if (data) {
-        setWatchlist(data.map((item: WatchlistItem) => item.project));
+        setWatchlist(data.map((item: { project: string }) => item.project));
       }
     } catch (error) {
       console.error('Error fetching watchlist:', error);
@@ -187,21 +182,26 @@ const DashboardInteractive = () => {
     }
   };
 
-  // Fetch user stats (can be extended with Neynar API)
+  // Fetch user stats from API route
   const fetchUserStats = async (userFid: number) => {
     try {
-      // Placeholder for Neynar API integration
-      // const stats = await getUserStats(userFid);
-      // setUserStats(prev => ({ ...prev, ...stats }));
+      const response = await fetch(`/api/user-stats?fid=${userFid}`);
       
-      // Mock data for now
+      if (!response.ok) {
+        throw new Error('Failed to fetch user stats');
+      }
+      
+      const stats = await response.json();
+      
       setUserStats(prev => ({
         ...prev,
-        followerCount: 1234,
-        followingCount: 567
+        followerCount: stats.followerCount,
+        followingCount: stats.followingCount,
+        username: stats.username || prev.username
       }));
     } catch (error) {
       console.error('Error fetching user stats:', error);
+      showToast('Could not load follower stats', 'warning');
     }
   };
 
