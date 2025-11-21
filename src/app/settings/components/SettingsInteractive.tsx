@@ -168,7 +168,7 @@ const SettingsInteractive = () => {
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border">
-        <div className="container mx-auto px-4 py-4">
+        <div className="px-4 py-4 max-w-full">
           <button
             onClick={() => router.back()}
             className="flex items-center text-muted-foreground hover:text-foreground transition mb-3"
@@ -182,7 +182,7 @@ const SettingsInteractive = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-6 space-y-6">
+      <div className="px-4 py-6 space-y-6 max-w-full">
         {/* User Profile */}
         <div className="bg-card rounded-xl p-5 shadow-subtle border border-border">
           <h2 className="text-lg font-bold text-foreground mb-4">Profile</h2>

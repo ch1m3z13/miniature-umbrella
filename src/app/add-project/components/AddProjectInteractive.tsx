@@ -10,13 +10,6 @@ interface ValidationError {
   message: string;
 }
 
-interface WatchlistProject {
-  id?: string;
-  project: string;
-  fid: number;
-  created_at?: string;
-}
-
 const AddProjectInteractive = () => {
   const router = useRouter();
   const [projectHandle, setProjectHandle] = useState('');
@@ -60,7 +53,7 @@ const AddProjectInteractive = () => {
 
       if (error) throw error;
       if (data) {
-        setWatchlist(data.map(item => item.project));
+        setWatchlist(data.map((item: { project: string }) => item.project));
       }
     } catch (error) {
       console.error('Error fetching watchlist:', error);
@@ -221,7 +214,7 @@ const AddProjectInteractive = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-6 pb-20">
+      <div className="px-4 py-6 pb-20 max-w-full">
         {/* Header */}
         <div className="mb-8">
           <button

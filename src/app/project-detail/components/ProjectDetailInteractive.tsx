@@ -128,7 +128,7 @@ const ProjectDetailInteractive = () => {
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border">
-        <div className="container mx-auto px-4 py-4">
+        <div className="px-4 py-4 max-w-full">
           <button
             onClick={() => router.back()}
             className="flex items-center text-muted-foreground hover:text-foreground transition mb-3"
@@ -185,7 +185,7 @@ const ProjectDetailInteractive = () => {
       </div>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-6">
+      <div className="px-4 py-6 max-w-full">
         {/* Summary Tab */}
         {activeTab === 'summary' && (
           <div className="space-y-4">

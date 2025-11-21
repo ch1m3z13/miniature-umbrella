@@ -43,6 +43,38 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            /* Farcaster Mini App Container Sizing */
+            html, body {
+              margin: 0;
+              padding: 0;
+              width: 100%;
+              height: 100%;
+              overflow-x: hidden;
+            }
+            
+            /* Desktop - Fixed dimensions for Farcaster web */
+            @media (min-width: 768px) {
+              body {
+                max-width: 424px;
+                height: 695px;
+                margin: 0 auto;
+              }
+            }
+            
+            /* Mobile - Full device dimensions */
+            @media (max-width: 767px) {
+              body {
+                width: 100vw;
+                height: 100vh;
+              }
+            }
+          `
+        }} />
+      </head>
       <body suppressHydrationWarning={true}>
         <Providers>{children}</Providers>
         <Analytics />
