@@ -76,6 +76,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@netlify/plugin-nextjs": "^5.11.1",
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "@types/ms": "^2.1.0",
     "@types/node": "^20",
     "@types/prop-types": "^15.7.15",

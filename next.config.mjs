@@ -10,29 +10,19 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.pexels.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.pixabay.com',
-      },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'images.pexels.com' },
+      { protocol: 'https', hostname: 'images.pixabay.com' },
     ],
   },
   async redirects() {
     return [
-      // Farcaster Domain Verification Redirect (Temporary 307)
       {
         source: '/.well-known/farcaster.json',
-        destination: 'https://api.farcaster.xyz/miniapps/hosted-manifest/019a95f6-0a22-8178-7c14-7ff79576e889',
+        destination:
+          'https://api.farcaster.xyz/miniapps/hosted-manifest/019a95f6-0a22-8178-7c14-7ff79576e889',
         permanent: false,
       },
-      // Root (/) to Home Dashboard Redirect
       {
         source: '/',
         destination: '/home-dashboard',
@@ -40,15 +30,30 @@ const nextConfig = {
       },
     ];
   },
+
   webpack(config) {
-    // Webpack rule for the critical @dhiwise/component-tagger
+    //
+    // 1️⃣ Existing DhiWise loader — keep it
+    //
     config.module.rules.push({
       test: /\.(jsx|tsx)$/,
       exclude: [/node_modules/],
-      use: [{
-        loader: '@dhiwise/component-tagger/nextLoader',
-      }],
+      use: [
+        {
+          loader: '@dhiwise/component-tagger/nextLoader',
+        },
+      ],
     });
+
+    //
+    // 2️⃣ MetaMask SDK Fix — Option 2 addition
+    // Prevent Webpack from trying to bundle react-native storage layer
+    //
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      '@react-native-async-storage/async-storage': false,
+    };
+
     return config;
   },
 };
