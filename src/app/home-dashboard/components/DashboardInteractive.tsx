@@ -50,7 +50,6 @@ const DashboardInteractive = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [showFilters, setShowFilters] = useState(false);
   const [selectedProject, setSelectedProject] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
@@ -68,67 +67,9 @@ const DashboardInteractive = () => {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
 
   // Mock data
-  const mockProjects: Project[] = [
-    { id: '1', name: 'TechStartup X' },
-    { id: '2', name: 'CryptoDAO' },
-    { id: '3', name: 'NFT Collection' },
-    { id: '4', name: 'DeFi Protocol' }
-  ];
+  const mockProjects: Project[] = [];
 
-  const mockPosts: Post[] = [
-    {
-      id: '1',
-      content: "🚀 Just shipped our latest feature! The community response has been incredible. Sometimes the best innovations come from listening to your users. What's your take on user-driven development? #TechStartup #Innovation",
-      projectName: 'TechStartup X',
-      projectImage: "https://images.unsplash.com/photo-1667391551176-9070c1dc52e0",
-      projectImageAlt: 'Modern tech startup office with glass walls and collaborative workspace',
-      timestamp: '2 hours ago',
-      likes: 42,
-      shares: 8,
-      status: 'pending',
-      platform: 'X',
-      projectId: '1'
-    },
-    {
-      id: '2',
-      content: "💎 The future of decentralized governance is here! Our latest proposal just passed with 89% community approval. Democracy in action, powered by blockchain. Who says crypto can't be inclusive? 🗳️ #DAO #Crypto",
-      projectName: 'CryptoDAO',
-      projectImage: "https://images.unsplash.com/photo-1667808931689-00d08946d9c7",
-      projectImageAlt: 'Digital cryptocurrency coins and blockchain network visualization on dark background',
-      timestamp: '4 hours ago',
-      likes: 156,
-      shares: 23,
-      status: 'approved',
-      platform: 'Farcaster',
-      projectId: '2'
-    },
-    {
-      id: '3',
-      content: "🎨 Art meets technology in ways we never imagined. Our latest NFT drop sold out in 3 minutes! The intersection of creativity and blockchain continues to amaze us. What's your favorite NFT project? #NFT #DigitalArt",
-      projectName: 'NFT Collection',
-      projectImage: "https://images.unsplash.com/photo-1514480528757-fabb827ff382",
-      projectImageAlt: 'Colorful digital art NFT collection display with geometric patterns and vibrant colors',
-      timestamp: '6 hours ago',
-      likes: 89,
-      shares: 15,
-      status: 'approved',
-      platform: 'X',
-      projectId: '3'
-    },
-    {
-      id: '4',
-      content: "⚡ DeFi just got faster! Our new protocol reduces transaction costs by 70% while maintaining security. Sometimes the best solutions are the simplest ones. Ready to experience lightning-fast DeFi? #DeFi #Blockchain",
-      projectName: 'DeFi Protocol',
-      projectImage: "https://images.unsplash.com/photo-1659018966825-43297e655ccf",
-      projectImageAlt: 'Futuristic DeFi protocol interface with financial charts and blockchain connections',
-      timestamp: '8 hours ago',
-      likes: 234,
-      shares: 45,
-      status: 'rejected',
-      platform: 'Farcaster',
-      projectId: '4'
-    }
-  ];
+  const mockPosts: Post[] = [];
 
   // Initialize Farcaster SDK and fetch user data
   useEffect(() => {
@@ -228,14 +169,30 @@ const DashboardInteractive = () => {
 
   useEffect(() => {
     setIsHydrated(true);
-    // Simulate loading
-    const timer = setTimeout(() => {
-      setPosts(mockPosts);
-      setIsLoading(false);
-    }, 1500);
+    // Fetch real posts from watchlist projects
+    const fetchPosts = async () => {
+      if (watchlist.length === 0) {
+        setIsLoading(false);
+        return;
+      }
 
-    return () => clearTimeout(timer);
-  }, []);
+      try {
+        // TODO: Implement actual API call to fetch posts from tracked projects
+        // For now, we'll show empty state
+        setPosts([]);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (watchlist.length > 0) {
+      fetchPosts();
+    } else {
+      setIsLoading(false);
+    }
+  }, [watchlist]);
 
   // Filter and sort posts
   useEffect(() => {
@@ -328,7 +285,7 @@ const DashboardInteractive = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-6 pb-20">
+      <div className="mx-auto px-4 py-6 pb-20 max-w-full">
         {/* User Stats Header */}
         <div className="bg-card rounded-xl p-4 mb-6 shadow-subtle border border-border">
           <div className="flex items-center justify-between">
@@ -388,22 +345,56 @@ const DashboardInteractive = () => {
           </div>
         )}
 
-        <FilterControls
-          selectedProject={selectedProject}
-          selectedStatus={selectedStatus}
-          sortBy={sortBy}
-          onProjectChange={setSelectedProject}
-          onStatusChange={setSelectedStatus}
-          onSortChange={setSortBy}
-          projects={mockProjects}
-        />
+        {/* Filters - Collapsible */}
+        {showFilters && (
+          <div className="mb-6">
+            <FilterControls
+              selectedProject={selectedProject}
+              selectedStatus={selectedStatus}
+              sortBy={sortBy}
+              onProjectChange={setSelectedProject}
+              onStatusChange={setSelectedStatus}
+              onSortChange={setSortBy}
+              projects={mockProjects}
+            />
+          </div>
+        )}
+
+        {/* Toggle Filters Button */}
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="mb-4 text-sm text-primary hover:text-primary/80 transition flex items-center gap-2"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+          </svg>
+          {showFilters ? 'Hide Filters' : 'Show Filters'}
+        </button>
 
         {isLoading ? (
           <div className="space-y-6">
             {[...Array(3)].map((_, i) => <PostSkeleton key={i} />)}
           </div>
         ) : filteredPosts.length === 0 ? (
-          <EmptyState />
+          <div className="bg-card rounded-xl p-8 text-center border border-border">
+            <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-10 h-10 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-foreground mb-2">No Posts Yet</h3>
+            <p className="text-muted-foreground mb-6">
+              {watchlist.length === 0 
+                ? "Start tracking projects to see AI-generated posts here" 
+                : "Posts from your tracked projects will appear here"}
+            </p>
+            <button
+              onClick={() => router.push('/add-project')}
+              className="bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition"
+            >
+              {watchlist.length === 0 ? 'Add Your First Project' : 'Add More Projects'}
+            </button>
+          </div>
         ) : (
           <div className="space-y-6">
             {filteredPosts.map((post) => (

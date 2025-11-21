@@ -136,7 +136,7 @@ const ProjectsListInteractive = () => {
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border">
-        <div className="container mx-auto px-4 py-4">
+        <div className="px-4 py-4 max-w-full">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center font-bold text-white">
@@ -211,7 +211,7 @@ const ProjectsListInteractive = () => {
       </div>
 
       {/* Projects Grid */}
-      <div className="container mx-auto px-4 py-6">
+      <div className="px-4 py-6 max-w-full">
         {filteredProjects.length === 0 ? (
           <div className="text-center py-16">
             <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
@@ -233,7 +233,7 @@ const ProjectsListInteractive = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             {filteredProjects.map((project) => (
               <div
                 key={project.id}
