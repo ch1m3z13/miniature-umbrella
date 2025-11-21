@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import '../styles/index.css'
-import { Providers } from '../components/providers'
+import { Providers } from '../components/common/providers'
 import { Analytics } from '@vercel/analytics/next'
 import { MiniAppProvider } from '@neynar/react'
 
