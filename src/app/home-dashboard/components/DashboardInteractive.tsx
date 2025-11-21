@@ -54,8 +54,9 @@ const DashboardInteractive = () => {
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
   const [toast, setToast] = useState<Toast>({ message: '', type: 'info', isVisible: false });
-  
-  // Bead features
+  const [showFilters, setShowFilters] = useState(false);
+
+
   const [userStats, setUserStats] = useState<UserStats>({
     fid: null,
     username: 'Guest',
@@ -66,12 +67,12 @@ const DashboardInteractive = () => {
   const [dailySummary, setDailySummary] = useState<string>('');
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
 
-  // Mock data
+
   const mockProjects: Project[] = [];
 
   const mockPosts: Post[] = [];
 
-  // Initialize Farcaster SDK and fetch user data
+
   useEffect(() => {
     const initializeApp = async () => {
       try {

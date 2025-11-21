@@ -4,7 +4,7 @@
     "version": "1",
     "iconUrl": "https://bead-app.vercel.app/assets/images/icon.png",
     "homeUrl": "https://bead-app.vercel.app/home-dashboard",
-    "splashImageUrl": "https://bead-app.vercel.app/assets/images/splash.png",
+    "splashImageUrl": "https://bead-app.vercel.app/assets/images/icon.png",
     "splashBackgroundColor": "#A020F0",
     "webhookUrl": "https://bead-app.vercel.app/home-dashboard/api/webhook",
     "subtitle": "Web3 Wingman",
